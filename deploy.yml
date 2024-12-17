@@ -1,0 +1,29 @@
+---
+- name: About US
+  hosts: localhost
+  become: yes  
+
+  tasks:
+    - name: add apache 
+      yum:
+        name: httpd
+        state: present
+
+    - name: apache config
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: copying fiels
+      copy:
+        src: "{{ playbook_dir }}/"
+        dest: /var/www/html/
+        owner: apache
+        group: apache
+        mode: '0644'
+
+    - name: apache restart
+      service:
+        name: httpd
+        state: restarted
